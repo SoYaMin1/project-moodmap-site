@@ -146,9 +146,6 @@ GET	/u/<username>/geojson/	Экспорт в GeoJSON
 Минимум нагрузки на БД. Составные индексы (user, date) и (user, mood), select_related, values().annotate() вместо Python-циклов. Агрегаты кэшируются на 5 минут.
 
 
-Автор
-Your Name
-
 GitHub: @SoYaMin
 
 Telegram: @your_nickname
