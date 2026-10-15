@@ -2,12 +2,11 @@
 
 Интерактивная карта мест и дневник настроения. Отмечай, где ты был, ставь одну из 10 улыбок и смотри, как менялось твоё настроение во времени и пространстве.
 
-![Django](https://img.shields.io/badge/Django-5.x-092E20?logo=django)
-![Python](https://img.shields.io/badge/Python-3.12+-3776AB?logo=python&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791?logo=postgresql&logoColor=white)
+![Django](https://img.shields.io/badge/Django-6.x-092E20?logo=django)
+![Python](https://img.shields.io/badge/Python-3.13.3-3776AB?logo=python&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-336791?logo=postgresql&logoColor=white)
 ![Leaflet](https://img.shields.io/badge/Leaflet-1.9-199900?logo=leaflet&logoColor=white)
 ![Chart.js](https://img.shields.io/badge/Chart.js-4.4-FF6384?logo=chartdotjs&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---
 
@@ -33,7 +32,7 @@
 
 | Слой | Технология |
 |------|-----------|
-| Backend | Python 3.12+, Django 5.x |
+| Backend | Python 3.13.3+, Django 6.12 |
 | БД | PostgreSQL (прод) / SQLite (dev) |
 | Frontend | Django templates, Tailwind CSS (CDN), vanilla JS |
 | Карта | Leaflet, Leaflet.markercluster, Leaflet.heat |
@@ -146,9 +145,7 @@ GET	/u/<username>/geojson/	Экспорт в GeoJSON
 Минимум нагрузки на БД. Составные индексы (user, date) и (user, mood), select_related, values().annotate() вместо Python-циклов. Агрегаты кэшируются на 5 минут.
 
 
-GitHub: @SoYaMin
-
-Telegram: @your_nickname
+GitHub: https://github.com/SoYaMin1/
 
 Email: pandawow0700148815@gmail.com
 
