@@ -1,0 +1,29 @@
+{% comment %}
+Атмосферный фон: градиент + солнце + облака + птицы.
+Всё на чистом CSS, без картинок.
+{% endcomment %}
+<div class="sky-layer" aria-hidden="true">
+
+  <div class="sky-gradient"></div>
+
+  {% if theme.sun %}
+  <div class="sun">
+    <div class="sun-rays"></div>
+    <div class="sun-core"></div>
+  </div>
+  {% endif %}
+
+  {% if theme.clouds %}
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
+  <div class="cloud cloud-3"></div>
+  {% endif %}
+
+  {% if theme.birds %}
+  <div class="birds">
+    <svg viewBox="0 0 30 12" class="bird bird-1"><path d="M0 6 Q7 -1 15 6 Q23 -1 30 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+    <svg viewBox="0 0 30 12" class="bird bird-2"><path d="M0 6 Q7 -1 15 6 Q23 -1 30 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+    <svg viewBox="0 0 30 12" class="bird bird-3"><path d="M0 6 Q7 -1 15 6 Q23 -1 30 6" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+  </div>
+  {% endif %}
+</div>

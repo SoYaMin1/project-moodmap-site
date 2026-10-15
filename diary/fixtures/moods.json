@@ -1,0 +1,12 @@
+[
+  {"model": "diary.mood", "pk": 1, "fields": {"score": 1,  "emoji": "😭", "name": "Ужасно",                  "color": "#7f1d1d"}},
+  {"model": "diary.mood", "pk": 2, "fields": {"score": 2,  "emoji": "😞", "name": "Плохо",                   "color": "#991b1b"}},
+  {"model": "diary.mood", "pk": 3, "fields": {"score": 3,  "emoji": "😕", "name": "Так себе",                "color": "#b45309"}},
+  {"model": "diary.mood", "pk": 4, "fields": {"score": 4,  "emoji": "😐", "name": "Нейтрально",              "color": "#a16207"}},
+  {"model": "diary.mood", "pk": 5, "fields": {"score": 5,  "emoji": "🙂", "name": "Норм",                    "color": "#ca8a04"}},
+  {"model": "diary.mood", "pk": 6, "fields": {"score": 6,  "emoji": "😊", "name": "Хорошо",                  "color": "#65a30d"}},
+  {"model": "diary.mood", "pk": 7, "fields": {"score": 7,  "emoji": "😄", "name": "Отлично",                 "color": "#16a34a"}},
+  {"model": "diary.mood", "pk": 8, "fields": {"score": 8,  "emoji": "🤩", "name": "Вау!",                    "color": "#059669"}},
+  {"model": "diary.mood", "pk": 9, "fields": {"score": 9,  "emoji": "🥳", "name": "Восторг",                 "color": "#0d9488"}},
+  {"model": "diary.mood", "pk": 10, "fields": {"score": 10, "emoji": "🤯", "name": "Лучшее место в жизни",    "color": "#7c3aed"}}
+]

@@ -1,0 +1,159 @@
+/* =========================================================
+   SKY LAYER — атмосферный фон
+   ========================================================= */
+
+.sky-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sky-gradient {
+  position: absolute;
+  inset: 0;
+  transition: background 1.5s ease;
+}
+
+/* Пусто — очень светлый */
+.theme-empty .sky-gradient {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, #e0e7ff 0%, transparent 60%),
+    linear-gradient(180deg, #fefbf6 0%, #f5f3ff 100%);
+}
+
+/* Домосед — тёплый беж */
+.theme-homebody .sky-gradient {
+  background:
+    radial-gradient(ellipse 90% 60% at 50% 0%, rgba(253,230,138,0.35) 0%, transparent 60%),
+    linear-gradient(180deg, #fffbeb 0%, #fef3c7 60%, #fef9f3 100%);
+}
+
+/* Середина — рассветное небо */
+.theme-balanced .sky-gradient {
+  background:
+    radial-gradient(ellipse 90% 65% at 50% 0%, rgba(251,207,232,0.6) 0%, transparent 55%),
+    linear-gradient(180deg, #e0f2fe 0%, #fef3c7 65%, #fefbf6 100%);
+}
+
+/* Путешественник — яркое небо */
+.theme-traveler .sky-gradient {
+  background:
+    radial-gradient(ellipse 100% 70% at 50% 0%, #bae6fd 0%, transparent 60%),
+    linear-gradient(180deg, #7dd3fc 0%, #bae6fd 40%, #fef9f3 90%);
+}
+
+/* ============ СОЛНЦЕ ============ */
+.sun {
+  position: absolute;
+  top: 8%;
+  right: 10%;
+  width: 120px;
+  height: 120px;
+  animation: sun-rise 2s ease-out both;
+}
+
+.sun-core {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff7d1 0%, #fcd34d 45%, #f59e0b 100%);
+  box-shadow:
+    0 0 40px 10px rgba(252, 211, 77, 0.55),
+    0 0 100px 30px rgba(251, 191, 36, 0.35);
+  animation: sun-pulse 4s ease-in-out infinite;
+}
+
+.sun-rays {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg, rgba(253, 224, 71, 0.35) 15deg, transparent 30deg,
+    transparent 45deg, rgba(253, 224, 71, 0.35) 60deg, transparent 75deg,
+    transparent 90deg, rgba(253, 224, 71, 0.35) 105deg, transparent 120deg,
+    transparent 135deg, rgba(253, 224, 71, 0.35) 150deg, transparent 165deg,
+    transparent 180deg, rgba(253, 224, 71, 0.35) 195deg, transparent 210deg,
+    transparent 225deg, rgba(253, 224, 71, 0.35) 240deg, transparent 255deg,
+    transparent 270deg, rgba(253, 224, 71, 0.35) 285deg, transparent 300deg,
+    transparent 315deg, rgba(253, 224, 71, 0.35) 330deg, transparent 345deg,
+    transparent 360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 55%, black 60%, black 100%);
+          mask: radial-gradient(circle, transparent 55%, black 60%, black 100%);
+  animation: sun-rotate 60s linear infinite;
+  opacity: 0.9;
+}
+
+@keyframes sun-rise {
+  from { opacity: 0; transform: translateY(40px) scale(0.85); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes sun-pulse {
+  0%, 100% { box-shadow: 0 0 40px 10px rgba(252,211,77,0.55), 0 0 100px 30px rgba(251,191,36,0.35); }
+  50%      { box-shadow: 0 0 55px 18px rgba(252,211,77,0.70), 0 0 120px 40px rgba(251,191,36,0.45); }
+}
+@keyframes sun-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ============ ОБЛАКА ============ */
+.cloud {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 50%;
+  opacity: 0.75;
+  filter: blur(2px);
+  box-shadow:
+    40px 10px 0 -6px #fff,
+    80px 0px 0 -10px #fff,
+    -40px 12px 0 -10px #fff;
+  animation: cloud-drift linear infinite;
+}
+
+.cloud-1 { width: 130px; height: 40px; top: 12%; left: -20%; animation-duration: 90s; animation-delay: -10s; }
+.cloud-2 { width: 100px; height: 32px; top: 22%; left: -20%; opacity: 0.55; animation-duration: 130s; animation-delay: -40s; }
+.cloud-3 { width: 160px; height: 48px; top: 4%; left: -20%; opacity: 0.45; animation-duration: 170s; animation-delay: -70s; }
+
+@keyframes cloud-drift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(100vw + 300px)); }
+}
+
+.theme-homebody .cloud { opacity: 0.35; }
+.theme-empty .cloud    { opacity: 0.25; }
+.theme-traveler .cloud { opacity: 0.85; }
+
+/* ============ ПТИЦЫ ============ */
+.birds { position: absolute; inset: 0; color: #334155; }
+
+.bird { position: absolute; width: 34px; height: 14px; opacity: 0.7; }
+.bird-1 { top: 18%; left: -10%; animation: bird-fly 32s linear infinite; }
+.bird-2 { top: 22%; left: -10%; width: 26px; animation: bird-fly 38s linear infinite; animation-delay: -8s; }
+.bird-3 { top: 15%; left: -10%; width: 22px; animation: bird-fly 46s linear infinite; animation-delay: -18s; }
+
+@keyframes bird-fly {
+  0%   { transform: translateX(0) translateY(0); }
+  25%  { transform: translateX(30vw) translateY(-12px); }
+  50%  { transform: translateX(60vw) translateY(4px); }
+  75%  { transform: translateX(85vw) translateY(-10px); }
+  100% { transform: translateX(calc(100vw + 100px)) translateY(0); }
+}
+
+/* Мобильные */
+@media (max-width: 640px) {
+  .sun { width: 80px; height: 80px; }
+  .sun-core { width: 56px; height: 56px; }
+  .sun-rays { inset: -20px; }
+  .cloud-3 { display: none; }
+}
+
+/* Уважение к reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .sun-rays, .cloud, .bird, .sun-core { animation: none !important; }
+}

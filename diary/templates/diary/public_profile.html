@@ -1,0 +1,122 @@
+{% extends "diary/base.html" %}
+{% load humanize %}
+
+{% block title %}{{ profile_user.username }} — MoodMap{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4 py-12 space-y-6">
+
+  <!-- ─────── ШАПКА ПРОФИЛЯ ─────── -->
+  <div class="flex items-start gap-4">
+    <div class="w-16 h-16 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-2xl font-semibold shrink-0">
+      {{ profile_user.username|first|upper }}
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1">
+        Публичный профиль
+      </div>
+      <h1 class="text-2xl font-semibold text-slate-900 truncate">
+        {{ profile_user.username }}
+      </h1>
+      <div class="text-sm text-slate-500 mt-1">
+        Записей — {{ entries|length }}
+        {% if profile_user.date_joined %}
+          · на MoodMap с {{ profile_user.date_joined|date:"F Y" }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────── КОНТАКТЫ ─────── -->
+  {% if profile_user.email or profile_user.profile.phone or profile_user.profile.bio %}
+  <div class="rounded-xl p-6 bg-white border border-slate-200">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm">
+      {% if profile_user.email %}
+      <div>
+        <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1.5">Email</div>
+        <a href="mailto:{{ profile_user.email }}" class="text-slate-900 hover:underline break-all">
+          {{ profile_user.email }}
+        </a>
+      </div>
+      {% endif %}
+
+      {% if profile_user.profile.phone %}
+      <div>
+        <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1.5">Телефон</div>
+        <a href="tel:{{ profile_user.profile.phone }}" class="text-slate-900 hover:underline">
+          {{ profile_user.profile.phone }}
+        </a>
+      </div>
+      {% endif %}
+
+      {% if profile_user.profile.bio %}
+      <div class="sm:col-span-2">
+        <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1.5">О себе</div>
+        <div class="text-slate-700 leading-relaxed">{{ profile_user.profile.bio }}</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- ─────── ВЕРДИКТ ─────── -->
+  <div class="rounded-xl p-8 bg-white border border-slate-200">
+    <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-3">
+      Итог по записям
+    </div>
+    <h2 class="text-xl md:text-2xl font-semibold text-slate-900 leading-snug">
+      {{ verdict.text }}
+    </h2>
+    <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+      <span>Мест — <b class="text-slate-900 font-medium">{{ verdict.places_count }}</b></span>
+      <span>Дней — <b class="text-slate-900 font-medium">{{ verdict.unique_days }}</b></span>
+      <span>Средний балл — <b class="text-slate-900 font-medium">{{ verdict.avg_mood }}</b></span>
+      <span>Разброс — <b class="text-slate-900 font-medium">{{ verdict.geo_spread }} км</b></span>
+    </div>
+
+    <div class="mt-6 pt-6 border-t border-slate-100 flex items-center gap-3">
+      <div class="text-sm text-slate-500">Уровень</div>
+      <div class="text-xl font-semibold text-slate-900 tabular-nums">{{ verdict.percent }}</div>
+      <div class="w-32 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+        <div class="h-full rounded-full bg-slate-900" style="width: {{ verdict.percent }}%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────── ЗАПИСИ ─────── -->
+  <div>
+    <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-4 px-1">
+      Последние записи
+    </div>
+
+    <div class="space-y-2">
+      {% for e in entries %}
+      <div class="flex items-start gap-4 p-4 rounded-xl bg-white border border-slate-200 hover:border-slate-300 transition">
+        <div class="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
+             style="background: {{ e.mood.color }}22;">
+          {{ e.mood.emoji }}
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-baseline justify-between gap-3 flex-wrap">
+            <div class="text-slate-900 font-medium truncate">
+              {{ e.title|default:"Без названия" }}
+            </div>
+            <div class="text-xs text-slate-400 shrink-0">
+              {{ e.date|date:"d.m.Y" }}
+            </div>
+          </div>
+          {% if e.note %}
+          <div class="text-sm text-slate-500 mt-1 leading-relaxed">{{ e.note }}</div>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div class="text-center py-12 rounded-xl bg-white border border-slate-200">
+        <div class="text-slate-500 text-sm">Пока нет записей</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

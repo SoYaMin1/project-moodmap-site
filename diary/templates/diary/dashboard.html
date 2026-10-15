@@ -1,0 +1,185 @@
+{% extends "diary/base.html" %}
+{% load static humanize %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8 space-y-6">
+
+  <!-- ─────── ВЕРДИКТ ─────── -->
+  <section class="rounded-xl p-8 bg-white border border-slate-200">
+    <div class="flex flex-col lg:flex-row gap-8 lg:items-start lg:justify-between">
+
+      <div class="max-w-2xl">
+        <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-3">
+          Итог по твоим записям
+        </div>
+        <h1 class="text-2xl md:text-[28px] font-semibold text-slate-900 leading-snug">
+          {{ verdict.text }}
+        </h1>
+        <div class="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+          <span>Мест — <b class="text-slate-900 font-medium">{{ verdict.places_count }}</b></span>
+          <span>Дней — <b class="text-slate-900 font-medium">{{ verdict.unique_days }}</b></span>
+          <span>Средний балл — <b class="text-slate-900 font-medium">{{ verdict.avg_mood }}</b></span>
+          <span>Разброс — <b class="text-slate-900 font-medium">{{ verdict.geo_spread }} км</b></span>
+        </div>
+        <div class="mt-4 text-xs text-slate-500 flex items-center gap-2">
+          <span class="w-1.5 h-1.5 rounded-full
+            {% if theme.level == 'traveler' %}bg-amber-400
+            {% elif theme.level == 'balanced' %}bg-sky-400
+            {% elif theme.level == 'homebody' %}bg-orange-300
+            {% else %}bg-slate-300{% endif %}"></span>
+          {{ theme.label }}
+        </div>
+      </div>
+
+      <div class="shrink-0 lg:min-w-[200px]">
+        <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-3 lg:text-right">
+          Уровень
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="text-3xl font-semibold text-slate-900 tabular-nums">{{ verdict.percent }}</div>
+          <div class="w-24 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+            <div class="h-full rounded-full bg-slate-900" style="width: {{ verdict.percent }}%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div>
+        <div class="text-xs text-slate-500 mb-1.5">Всего мест</div>
+        <div class="text-2xl font-semibold text-slate-900 tabular-nums" id="kpi-total">—</div>
+      </div>
+      <div>
+        <div class="text-xs text-slate-500 mb-1.5">Уникальных дней</div>
+        <div class="text-2xl font-semibold text-slate-900 tabular-nums" id="kpi-days">—</div>
+      </div>
+      <div>
+        <div class="text-xs text-slate-500 mb-1.5">Средний балл</div>
+        <div class="text-2xl font-semibold text-slate-900 tabular-nums" id="kpi-avg">—</div>
+      </div>
+      <div>
+        <div class="text-xs text-slate-500 mb-1.5">Серия дней</div>
+        <div class="text-2xl font-semibold text-slate-900 tabular-nums">{{ streak }}</div>
+      </div>
+    </div>
+
+    {% if fav or happy_month %}
+    <div class="mt-6 pt-6 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+      {% if fav %}
+      <div>
+        <div class="text-xs text-slate-500 mb-1.5">Лучшее место по настроению</div>
+        <div class="text-slate-900">
+          {{ fav.mood.emoji }} {{ fav.title|default:"Без названия" }}
+          <span class="text-slate-400">· {{ fav.date|date:"d.m.Y" }}</span>
+        </div>
+      </div>
+      {% endif %}
+      {% if happy_month %}
+      <div>
+        <div class="text-xs text-slate-500 mb-1.5">Самый счастливый месяц</div>
+        <div class="text-slate-900">
+          {{ happy_month.m|date:"F Y" }}
+          <span class="text-slate-400">· средний {{ happy_month.avg|floatformat:1 }}</span>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- ─────── КАРТА ─────── -->
+  <section class="rounded-xl overflow-hidden border border-slate-200 bg-white">
+    <div class="flex flex-wrap items-center gap-2 p-3 border-b border-slate-200">
+      <span class="text-xs text-slate-500 mr-2">Период</span>
+      <button class="period-btn px-3 py-1 rounded-md text-sm text-slate-600 hover:bg-slate-100" data-period="week">Неделя</button>
+      <button class="period-btn px-3 py-1 rounded-md text-sm text-slate-600 hover:bg-slate-100" data-period="month">Месяц</button>
+      <button class="period-btn px-3 py-1 rounded-md text-sm text-slate-600 hover:bg-slate-100" data-period="year">Год</button>
+      <button class="period-btn px-3 py-1 rounded-md text-sm bg-slate-900 text-white" data-period="all">Всё</button>
+
+      <label class="ml-auto flex items-center gap-2 text-xs text-slate-600 cursor-pointer">
+        <input type="checkbox" id="heat-toggle" class="accent-slate-900"> Тепловая карта
+      </label>
+    </div>
+    <div id="map" class="h-[60vh] w-full"></div>
+  </section>
+
+  <!-- ─────── ГРАФИКИ ─────── -->
+  <section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+    <div class="lg:col-span-2 rounded-xl p-5 bg-white border border-slate-200">
+      <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-4">Динамика настроения</div>
+      <canvas id="lineChart" height="140"></canvas>
+    </div>
+    <div class="rounded-xl p-5 bg-white border border-slate-200">
+      <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-4">Распределение оценок</div>
+      <canvas id="doughnutChart" height="140"></canvas>
+    </div>
+    <div class="lg:col-span-3 rounded-xl p-5 bg-white border border-slate-200">
+      <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-4">Активность по дням</div>
+      <canvas id="barChart" height="90"></canvas>
+    </div>
+  </section>
+</div>
+
+<!-- ─────── МОДАЛКА ─────── -->
+<div id="entry-modal" class="hidden fixed inset-0 z-[1000] bg-slate-900/40 backdrop-blur-sm items-center justify-center p-4">
+  <div class="bg-white border border-slate-200 rounded-xl w-full max-w-lg p-6 space-y-5 shadow-xl">
+    <div class="flex items-center justify-between">
+      <h3 class="text-lg font-semibold text-slate-900">Отметить место</h3>
+      <button id="close-modal" class="text-slate-400 hover:text-slate-900 text-xl leading-none p-1">✕</button>
+    </div>
+
+    <form id="entry-form" class="space-y-4">
+      {% csrf_token %}
+      <input type="hidden" name="latitude" id="f-lat">
+      <input type="hidden" name="longitude" id="f-lng">
+
+      <div>
+        <label class="text-xs font-medium text-slate-500 block mb-2">Оценка</label>
+        <div id="mood-grid" class="grid grid-cols-5 gap-2"></div>
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-slate-500 block mb-1.5">Название места</label>
+        <input name="title" maxlength="128" placeholder="Например, Кафе на углу"
+               class="w-full px-3 py-2 rounded-md bg-white border border-slate-200 outline-none focus:border-slate-900 text-slate-900 text-sm">
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-slate-500 block mb-1.5">Заметка</label>
+        <textarea name="note" rows="3" placeholder="Пара слов о том, как прошло"
+                  class="w-full px-3 py-2 rounded-md bg-white border border-slate-200 outline-none focus:border-slate-900 text-slate-900 text-sm resize-none"></textarea>
+      </div>
+
+      <div>
+        <label class="text-xs font-medium text-slate-500 block mb-1.5">Дата</label>
+        <input type="date" name="date" id="f-date"
+               class="w-full px-3 py-2 rounded-md bg-white border border-slate-200 outline-none focus:border-slate-900 text-slate-900 text-sm">
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="cancel-modal"
+                class="px-4 py-2 rounded-md text-sm text-slate-600 hover:bg-slate-100 transition">Отмена</button>
+        <button type="submit"
+                class="px-4 py-2 rounded-md text-sm bg-slate-900 hover:bg-slate-800 text-white font-medium transition">Сохранить</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{{ moods_json|json_script:"moods-data" }}
+<div id="django-config"
+     data-stats-url="{% url 'diary:stats' %}"
+     data-entry-url="{% url 'diary:create_entry' %}"
+     data-csrf="{{ csrf_token }}"
+     hidden></div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+<script src="{% static 'js/map.js' %}"></script>
+<script src="{% static 'js/charts.js' %}"></script>
+<script src="{% static 'js/api.js' %}"></script>
+{% endblock %}
