@@ -124,3 +124,27 @@ html { scroll-behavior: smooth; }
   background-clip: content-box;
 }
 ::-webkit-scrollbar-thumb:hover { background: #94a3b8; background-clip: content-box; }
+
+/* Стилизация input[type=file] */
+input[type="file"] {
+  display: block;
+  width: 100%;
+  font-size: 13px;
+  color: #475569;
+  cursor: pointer;
+}
+input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  padding: 6px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+input[type="file"]::file-selector-button:hover {
+  background: #f8fafc;
+}

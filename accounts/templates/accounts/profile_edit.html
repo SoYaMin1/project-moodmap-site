@@ -19,8 +19,38 @@
     {% endfor %}
   {% endif %}
 
-  <form method="post" class="rounded-xl bg-white border border-slate-200 p-6 space-y-5">
+  <form method="post" enctype="multipart/form-data"
+        class="rounded-xl bg-white border border-slate-200 p-6 space-y-5">
     {% csrf_token %}
+
+    <!-- Аватар -->
+    <div class="flex items-center gap-5 pb-5 border-b border-slate-100">
+      <div class="shrink-0">
+        {% if form.instance.avatar %}
+          <img src="{{ form.instance.avatar.url }}"
+               alt="Аватар"
+               class="w-20 h-20 rounded-full object-cover border border-slate-200">
+        {% else %}
+          <div class="w-20 h-20 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-2xl font-semibold">
+            {{ request.user.username|first|upper }}
+          </div>
+        {% endif %}
+      </div>
+      <div class="flex-1 min-w-0">
+        <label class="block text-xs font-medium text-slate-500 mb-1.5">Аватар</label>
+        {{ form.avatar }}
+        <p class="text-xs text-slate-400 mt-1">PNG, JPG или WEBP, до 2 МБ</p>
+        {% if form.avatar.errors %}
+          <div class="text-xs text-red-600 mt-1">{{ form.avatar.errors|striptags }}</div>
+        {% endif %}
+        {% if form.instance.avatar %}
+          <label class="inline-flex items-center gap-2 mt-2 text-xs text-slate-500 cursor-pointer">
+            <input type="checkbox" name="avatar-clear" class="accent-slate-900">
+            Удалить текущий аватар
+          </label>
+        {% endif %}
+      </div>
+    </div>
 
     <div>
       <label class="block text-xs font-medium text-slate-500 mb-1.5">Никнейм</label>

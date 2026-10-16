@@ -8,9 +8,15 @@
 
   <!-- ─────── ШАПКА ПРОФИЛЯ ─────── -->
   <div class="flex items-start gap-4">
-    <div class="w-16 h-16 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-2xl font-semibold shrink-0">
-      {{ profile_user.username|first|upper }}
-    </div>
+    {% if profile_user.profile.avatar %}
+      <img src="{{ profile_user.profile.avatar.url }}"
+          alt="{{ profile_user.username }}"
+          class="w-16 h-16 rounded-full object-cover border border-slate-200 shrink-0">
+    {% else %}
+      <div class="w-16 h-16 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-2xl font-semibold shrink-0">
+        {{ profile_user.username|first|upper }}
+      </div>
+    {% endif %}
     <div class="flex-1 min-w-0">
       <div class="text-xs font-medium uppercase tracking-wide text-slate-500 mb-1">
         Публичный профиль
